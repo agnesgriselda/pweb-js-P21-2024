@@ -150,10 +150,12 @@ function updateCart() {
     totalPrice += item.price * item.quantity;
     cartItems.innerHTML += `
       <li>
-        ${item.title} - $${item.price} x ${item.quantity}
-        <button onclick="removeFromCart(${item.id})">Remove</button>
-        <button onclick="changeQuantity(${item.id}, 'increase')">+</button>
-        <button onclick="changeQuantity(${item.id}, 'decrease')">-</button>
+        <span>${item.title} - $${item.price} x ${item.quantity}</span>
+        <div class="cart-item-controls">
+          <button onclick="changeQuantity(${item.id}, 'decrease')">-</button>
+          <button onclick="changeQuantity(${item.id}, 'increase')">+</button>
+          <button onclick="removeFromCart(${item.id})">Remove</button>
+        </div>
       </li>
     `;
   });

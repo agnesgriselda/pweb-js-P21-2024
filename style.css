@@ -1,40 +1,94 @@
+/* General Styles */
 body {
-    font-family: Arial, sans-serif;
-    padding: 20px;
-  }
-  
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  #product-list {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .product {
-    border: 1px solid #ccc;
-    margin: 10px;
-    padding: 10px;
-    width: 200px;
-  }
-  
-  button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    cursor: pointer;
-  }
-  
-  button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  #cart {
-    margin-top: 20px;
-  }
-  
+  font-family: 'Comic Neue', cursive;
+  background: linear-gradient(to right, #ffccf9, #fcc2ff);
+  padding: 20px;
+  color: #444;
+}
+
+header {
+  text-align: center;
+  background: linear-gradient(to right, #ff99ff, #ff66ff);
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  color: #fff;
+  font-size: 36px;
+}
+
+label {
+  font-size: 16px;
+}
+
+input[type="text"], input[type="email"], select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 2px solid #ff66ff;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+/* Buttons */
+button {
+  background-color: #ff66ff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Product List */
+#product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.product {
+  background-color: #ffccf9;
+  border: 1px solid #ff66ff;
+  border-radius: 15px;
+  padding: 15px;
+  margin: 15px;
+  width: 200px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+h3 {
+  color: #ff66ff;
+}
+
+#cart {
+  background-color: #ffccf9;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Checkout Page */
+#checkout-form {
+  background-color: #ffccf9;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}

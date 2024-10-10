@@ -4,11 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>E-Commerce Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>My E-Commerce Store</h1>
+    <h1>My Cute E-Commerce Store</h1>
     <div id="cart-count">Cart: 0 items</div>
   </header>
 
@@ -20,6 +21,15 @@
         <option value="all">All</option>
       </select>
     </div>
+
+    <!-- Search bar -->
+    <div>
+      <label for="search-bar">Search Products: </label>
+      <input type="text" id="search-bar" placeholder="Search...">
+    </div>
+
+    <!-- Error message -->
+    <div id="error-message" style="color: red; display: none;"></div>
 
     <!-- Product List -->
     <section id="product-list"></section>
@@ -39,7 +49,7 @@
       <h2>Your Cart</h2>
       <ul id="cart-items"></ul>
       <div id="total-price">Total: $0.00</div>
-      <button id="checkout-btn">Checkout</button>
+      <button id="checkout-btn" onclick="location.href='checkout.html'">Checkout</button>
     </section>
   </main>
 

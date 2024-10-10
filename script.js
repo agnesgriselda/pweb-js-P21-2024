@@ -1,5 +1,3 @@
-// script.js
-
 const API_URL = 'https://dummyjson.com/products';
 
 // DOM elements
@@ -9,24 +7,33 @@ const categorySelect = document.getElementById('category-select');
 const cartItems = document.getElementById('cart-items');
 const totalPriceElem = document.getElementById('total-price');
 const itemCountSelect = document.getElementById('item-count');
+const searchBar = document.getElementById('search-bar');
+const errorMessage = document.getElementById('error-message');
 
 // State
 let products = [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let categories = new Set();
 let itemsPerPage = 5;
+let searchQuery = '';
 
 // Fetch products from API
 async function fetchProducts() {
   try {
     const response = await fetch(API_URL);
+    if (!response.ok) {
+      throw new Error('Failed to fetch products.');
+    }
     const data = await response.json();
     products = data.products;
     categories = new Set(products.map(product => product.category));
     renderCategories();
     renderProducts();
+    errorMessage.style.display = 'none'; // Hide error if successful
   } catch (error) {
     console.error("Failed to fetch products:", error);
+    errorMessage.textContent = 'Error: Failed to load products. Please try again later.';
+    errorMessage.style.display = 'block';
   }
 }
 
@@ -46,20 +53,29 @@ function renderProducts() {
     ? products 
     : products.filter(product => product.category === selectedCategory);
 
+  // Apply search filter
+  const searchedProducts = searchQuery
+    ? filteredProducts.filter(product => product.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    : filteredProducts;
+
   const startIndex = 0;
   const endIndex = itemsPerPage;
-  const visibleProducts = filteredProducts.slice(startIndex, endIndex);
+  const visibleProducts = searchedProducts.slice(startIndex, endIndex);
 
-  visibleProducts.forEach(product => {
-    const productElement = document.createElement('div');
-    productElement.classList.add('product');
-    productElement.innerHTML = `
-      <h3>${product.title}</h3>
-      <p>$${product.price}</p>
-      <button onclick="addToCart(${product.id})">Add to Cart</button>
-    `;
-    productList.appendChild(productElement);
-  });
+  if (visibleProducts.length === 0) {
+    productList.innerHTML = '<p>No products found.</p>';
+  } else {
+    visibleProducts.forEach(product => {
+      const productElement = document.createElement('div');
+      productElement.classList.add('product');
+      productElement.innerHTML = `
+        <h3>${product.title}</h3>
+        <p>$${product.price}</p>
+        <button onclick="addToCart(${product.id})">Add to Cart</button>
+      `;
+      productList.appendChild(productElement);
+    });
+  }
 }
 
 // Add product to cart
@@ -118,6 +134,14 @@ categorySelect.addEventListener('change', renderProducts);
 itemCountSelect.addEventListener('change', (e) => {
   itemsPerPage = parseInt(e.target.value, 10);
   renderProducts();
+});
+searchBar.addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  renderProducts();
+});
+
+document.getElementById('checkout-btn').addEventListener('click', () => {
+  localStorage.setItem('cart', JSON.stringify(cart));
 });
 
 // Initialize

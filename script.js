@@ -1,6 +1,6 @@
 const API_URL = 'https://dummyjson.com/products';
 
-// DOM elements
+// DOM Elements
 const productList = document.getElementById('product-list');
 const cartCount = document.getElementById('cart-count');
 const categorySelect = document.getElementById('category-select');
@@ -19,27 +19,27 @@ let itemsPerPage = 5;
 let currentPage = 1;
 let searchQuery = '';
 
-// Fetch products from API
+// Fetch Products from API
 async function fetchProducts() {
   try {
     const response = await fetch(API_URL);
     if (!response.ok) {
-      throw new Error('Failed to fetch products.');
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json();
     products = data.products;
     categories = new Set(products.map(product => product.category));
     renderCategories();
     renderProducts();
-    errorMessage.style.display = 'none'; 
+    errorMessage.style.display = 'none'; // Hide error if successful
   } catch (error) {
-    console.error("Failed to fetch products:", error);
-    errorMessage.textContent = 'Error: Failed to load products. Please try again later.';
+    console.error("Error fetching products:", error);
+    errorMessage.textContent = `Error: Failed to load products. ${error.message}`;
     errorMessage.style.display = 'block';
   }
 }
 
-// Render categories
+// Render Categories
 function renderCategories() {
   categorySelect.innerHTML = '<option value="all">All</option>';
   categories.forEach(category => {
@@ -47,12 +47,12 @@ function renderCategories() {
   });
 }
 
-// Render products with pagination
+// Render Products with Pagination
 function renderProducts() {
   productList.innerHTML = '';
   const selectedCategory = categorySelect.value;
-  const filteredProducts = selectedCategory === 'all' 
-    ? products 
+  const filteredProducts = selectedCategory === 'all'
+    ? products
     : products.filter(product => product.category === selectedCategory);
 
   // Apply search filter
@@ -66,7 +66,7 @@ function renderProducts() {
   const endIndex = startIndex + itemsPerPage;
   const visibleProducts = searchedProducts.slice(startIndex, endIndex);
 
-  // Display products
+  // Display Products
   if (visibleProducts.length === 0) {
     productList.innerHTML = '<p>No products found.</p>';
   } else {
@@ -74,6 +74,7 @@ function renderProducts() {
       const productElement = document.createElement('div');
       productElement.classList.add('product');
       productElement.innerHTML = `
+        <img src="${product.thumbnail}" alt="${product.title}" class="product-image"/>
         <h3>${product.title}</h3>
         <p>$${product.price}</p>
         <button onclick="addToCart(${product.id})">Add to Cart</button>
@@ -85,12 +86,12 @@ function renderProducts() {
   renderPagination(totalPages);
 }
 
-// Render pagination controls
+// Render Pagination Controls
 function renderPagination(totalPages) {
-  paginationContainer.innerHTML = ''; 
-  if (totalPages <= 1) return; 
+  paginationContainer.innerHTML = ''; // Clear existing pagination
+  if (totalPages <= 1) return; // No need for pagination if only one page
 
-  // Previous button
+  // Previous Button
   const prevButton = document.createElement('button');
   prevButton.textContent = 'Previous';
   prevButton.disabled = currentPage === 1;
@@ -100,11 +101,16 @@ function renderPagination(totalPages) {
   };
   paginationContainer.appendChild(prevButton);
 
-  // Page numbers
+  // Page Numbers
   for (let i = 1; i <= totalPages; i++) {
     const pageButton = document.createElement('button');
     pageButton.textContent = i;
-    pageButton.classList.add(i === currentPage ? 'active' : '');
+
+    // Add 'active' class to the current page
+    if (i === currentPage) {
+      pageButton.classList.add('active');
+    }
+
     pageButton.onclick = () => {
       currentPage = i;
       renderProducts();
@@ -112,7 +118,7 @@ function renderPagination(totalPages) {
     paginationContainer.appendChild(pageButton);
   }
 
-  // Next button
+  // Next Button
   const nextButton = document.createElement('button');
   nextButton.textContent = 'Next';
   nextButton.disabled = currentPage === totalPages;
@@ -123,7 +129,7 @@ function renderPagination(totalPages) {
   paginationContainer.appendChild(nextButton);
 }
 
-// Add product to cart
+// Add Product to Cart
 function addToCart(productId) {
   const product = products.find(p => p.id === productId);
   const cartItem = cart.find(item => item.id === productId);
@@ -135,7 +141,7 @@ function addToCart(productId) {
   updateCart();
 }
 
-// Update cart
+// Update Cart
 function updateCart() {
   cartItems.innerHTML = '';
   let totalPrice = 0;
@@ -157,13 +163,13 @@ function updateCart() {
   localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Remove product from cart
+// Remove Product from Cart
 function removeFromCart(productId) {
   cart = cart.filter(item => item.id !== productId);
   updateCart();
 }
 
-// Change quantity in cart
+// Change Quantity in Cart
 function changeQuantity(productId, action) {
   const cartItem = cart.find(item => item.id === productId);
   if (action === 'increase') {
@@ -174,19 +180,19 @@ function changeQuantity(productId, action) {
   updateCart();
 }
 
-// Event listeners
+// Event Listeners
 categorySelect.addEventListener('change', () => {
-  currentPage = 1; 
+  currentPage = 1; // Reset to the first page when the category changes
   renderProducts();
 });
 itemCountSelect.addEventListener('change', (e) => {
   itemsPerPage = parseInt(e.target.value, 10);
-  currentPage = 1; 
+  currentPage = 1; // Reset to the first page when items per page changes
   renderProducts();
 });
 searchBar.addEventListener('input', (e) => {
   searchQuery = e.target.value;
-  currentPage = 1; 
+  currentPage = 1; // Reset to the first page when searching
   renderProducts();
 });
 

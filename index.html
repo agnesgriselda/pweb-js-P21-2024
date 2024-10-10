@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>E-Commerce Store</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>My E-Commerce Store</h1>
+    <div id="cart-count">Cart: 0 items</div>
+  </header>
+
+  <main>
+    <!-- Filter by category -->
+    <div>
+      <label for="category-select">Filter by Category: </label>
+      <select id="category-select">
+        <option value="all">All</option>
+      </select>
+    </div>
+
+    <!-- Product List -->
+    <section id="product-list"></section>
+
+    <!-- Pagination -->
+    <div id="pagination">
+      <label for="item-count">Items per page: </label>
+      <select id="item-count">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="15">15</option>
+      </select>
+    </div>
+
+    <!-- Cart -->
+    <section id="cart">
+      <h2>Your Cart</h2>
+      <ul id="cart-items"></ul>
+      <div id="total-price">Total: $0.00</div>
+      <button id="checkout-btn">Checkout</button>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

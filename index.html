@@ -3,48 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>dummy store</title>
+  <title>E-Commerce Store</title>
   <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Toko Apalah</h1>
+    <h1>My Cute E-Commerce Store</h1>
     <div id="cart-count">Cart: 0 items</div>
   </header>
 
   <main>
-    <!-- Filter by category -->
-    <div>
+    <div class="filter-section">
       <label for="category-select">Filter by Category: </label>
       <select id="category-select">
         <option value="all">All</option>
       </select>
     </div>
 
-    <!-- Search bar -->
-    <div>
+    <div class="search-section">
       <label for="search-bar">Search Products: </label>
       <input type="text" id="search-bar" placeholder="Search...">
     </div>
 
-    <!-- Error message -->
     <div id="error-message" style="color: red; display: none;"></div>
 
-    <!-- Product List -->
     <section id="product-list"></section>
 
-    <!-- Pagination -->
-    <div id="pagination">
+    <div id="pagination-section">
       <label for="item-count">Items per page: </label>
       <select id="item-count">
         <option value="5">5</option>
         <option value="10">10</option>
         <option value="15">15</option>
       </select>
+
+      <div id="pagination-container"></div>
     </div>
 
-    <!-- Cart -->
     <section id="cart">
       <h2>Your Cart</h2>
       <ul id="cart-items"></ul>

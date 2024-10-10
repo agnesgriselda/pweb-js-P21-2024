@@ -9,12 +9,14 @@ const totalPriceElem = document.getElementById('total-price');
 const itemCountSelect = document.getElementById('item-count');
 const searchBar = document.getElementById('search-bar');
 const errorMessage = document.getElementById('error-message');
+const paginationContainer = document.getElementById('pagination-container');
 
 // State
 let products = [];
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 let categories = new Set();
 let itemsPerPage = 5;
+let currentPage = 1;
 let searchQuery = '';
 
 // Fetch products from API
@@ -29,7 +31,7 @@ async function fetchProducts() {
     categories = new Set(products.map(product => product.category));
     renderCategories();
     renderProducts();
-    errorMessage.style.display = 'none'; // Hide error if successful
+    errorMessage.style.display = 'none'; 
   } catch (error) {
     console.error("Failed to fetch products:", error);
     errorMessage.textContent = 'Error: Failed to load products. Please try again later.';
@@ -45,7 +47,7 @@ function renderCategories() {
   });
 }
 
-// Render products
+// Render products with pagination
 function renderProducts() {
   productList.innerHTML = '';
   const selectedCategory = categorySelect.value;
@@ -58,10 +60,13 @@ function renderProducts() {
     ? filteredProducts.filter(product => product.title.toLowerCase().includes(searchQuery.toLowerCase()))
     : filteredProducts;
 
-  const startIndex = 0;
-  const endIndex = itemsPerPage;
+  const totalProducts = searchedProducts.length;
+  const totalPages = Math.ceil(totalProducts / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
   const visibleProducts = searchedProducts.slice(startIndex, endIndex);
 
+  // Display products
   if (visibleProducts.length === 0) {
     productList.innerHTML = '<p>No products found.</p>';
   } else {
@@ -76,6 +81,46 @@ function renderProducts() {
       productList.appendChild(productElement);
     });
   }
+
+  renderPagination(totalPages);
+}
+
+// Render pagination controls
+function renderPagination(totalPages) {
+  paginationContainer.innerHTML = ''; 
+  if (totalPages <= 1) return; 
+
+  // Previous button
+  const prevButton = document.createElement('button');
+  prevButton.textContent = 'Previous';
+  prevButton.disabled = currentPage === 1;
+  prevButton.onclick = () => {
+    currentPage--;
+    renderProducts();
+  };
+  paginationContainer.appendChild(prevButton);
+
+  // Page numbers
+  for (let i = 1; i <= totalPages; i++) {
+    const pageButton = document.createElement('button');
+    pageButton.textContent = i;
+    pageButton.classList.add(i === currentPage ? 'active' : '');
+    pageButton.onclick = () => {
+      currentPage = i;
+      renderProducts();
+    };
+    paginationContainer.appendChild(pageButton);
+  }
+
+  // Next button
+  const nextButton = document.createElement('button');
+  nextButton.textContent = 'Next';
+  nextButton.disabled = currentPage === totalPages;
+  nextButton.onclick = () => {
+    currentPage++;
+    renderProducts();
+  };
+  paginationContainer.appendChild(nextButton);
 }
 
 // Add product to cart
@@ -130,18 +175,19 @@ function changeQuantity(productId, action) {
 }
 
 // Event listeners
-categorySelect.addEventListener('change', renderProducts);
+categorySelect.addEventListener('change', () => {
+  currentPage = 1; 
+  renderProducts();
+});
 itemCountSelect.addEventListener('change', (e) => {
   itemsPerPage = parseInt(e.target.value, 10);
+  currentPage = 1; 
   renderProducts();
 });
 searchBar.addEventListener('input', (e) => {
   searchQuery = e.target.value;
+  currentPage = 1; 
   renderProducts();
-});
-
-document.getElementById('checkout-btn').addEventListener('click', () => {
-  localStorage.setItem('cart', JSON.stringify(cart));
 });
 
 // Initialize
